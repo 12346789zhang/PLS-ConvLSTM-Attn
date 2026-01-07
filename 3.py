@@ -24,7 +24,7 @@ warnings.filterwarnings("ignore")
 matplotlib.rcParams["font.family"] = "SimHei"  # 定义使其正常显示中文字体黑体
 plt.rcParams["axes.unicode_minus"] = False  # 用来正常显示表示负号
 
-output_folder = '\\zll\\LOD\\fig'
+output_folder = 'F:\\zll\\LOD\\fig'
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 plot_counter = 1
@@ -38,7 +38,7 @@ os.makedirs(log_folder2, exist_ok=True)
 for g in range(0, 500, 1):
 
     def is_integer(s):
-        """检查字符串是否可以转换为整数"""
+       
         try:
             int(s)
             return True
@@ -46,9 +46,7 @@ for g in range(0, 500, 1):
             return False
 
     def read_specific_column_rows(file_path, column_index, start_date, end_date):
-        """
-        根据日期范围从文件中读取指定列的数据
-        """
+      
         selected_data = []
         try:
             with open(file_path, "r", encoding="utf-8") as file:
@@ -89,19 +87,19 @@ for g in range(0, 500, 1):
     start_date, end_date, extended_end_date = get_dynamic_date_range(g)
 
 
-    UT1_UTC = read_specific_column_rows("F:\\张璐璐\\日常变化\\EOP14.txt", 7, start_date, end_date)
-    LOD = read_specific_column_rows("F:\\张璐璐\\日常变化\\EOP14.txt", 8, start_date, end_date)
-    MJD = read_specific_column_rows("F:\\张璐璐\\日常变化\\EOP14.txt", 4, start_date, end_date)
+    UT1_UTC = read_specific_column_rows("F:\\zll\\LOD\\EOP14.txt", 7, start_date, end_date)
+    LOD = read_specific_column_rows("F:\\zll\\LOD\\EOP14.txt", 8, start_date, end_date)
+    MJD = read_specific_column_rows("F:\\zll\\LOD\\EOP14.txt", 4, start_date, end_date)
 
-    UT4_UTC = read_specific_column_rows("F:\\张璐璐\\日常变化\\EOP14.txt", 7, start_date, extended_end_date)
-    lod2 = read_specific_column_rows("F:\\张璐璐\\日常变化\\EOP14.txt", 8, start_date, extended_end_date)
-    MJD90 = read_specific_column_rows("F:\\张璐璐\\日常变化\\EOP14.txt", 4, start_date, extended_end_date)
+    UT4_UTC = read_specific_column_rows("F:\\zll\\LOD\\EOP14.txt", 7, start_date, extended_end_date)
+    lod2 = read_specific_column_rows("F:\\zll\\LOD\\EOP14.txt", 8, start_date, extended_end_date)
+    MJD90 = read_specific_column_rows("F:\\zll\\LOD\\EOP14.txt", 4, start_date, extended_end_date)
 
-    DUT_values = read_specific_column_rows("F:\\张璐璐\\日常变化\\潮汐值.txt", 5, start_date, end_date)
-    DLOD_values = read_specific_column_rows("F:\\张璐璐\\日常变化\\潮汐值.txt", 6, start_date, end_date)
+    DUT_values = read_specific_column_rows("F:\\zll\\LOD\\潮汐值.txt", 5, start_date, end_date)
+    DLOD_values = read_specific_column_rows("F:\\zll\\LOD\\潮汐值.txt", 6, start_date, end_date)
 
-    DUT_values1 = read_specific_column_rows("F:\\张璐璐\\日常变化\\潮汐值.txt", 5, start_date, extended_end_date)
-    DLOD_values1 = read_specific_column_rows("F:\\张璐璐\\日常变化\\潮汐值.txt", 6, start_date, extended_end_date)
+    DUT_values1 = read_specific_column_rows("F:\\zll\\LOD\\潮汐值.txt", 5, start_date, extended_end_date)
+    DLOD_values1 = read_specific_column_rows("F:\\zll\\LOD\\潮汐值.txt", 6, start_date, extended_end_date)
     ##################################跳秒################################################################
 
     #LODKCX = np.array(LOD) - np.array(DLOD_values)
@@ -134,22 +132,13 @@ for g in range(0, 500, 1):
     # diff = -np.diff(UT1CX)
 
     def extrap(y, n):
-        """
-        扩展数组边界，用于差分计算
-        :param y: 输入的一维数组
-        :param n: 扩展的长度
-        :return: 扩展后的数组
-        """
+        
         # 在数组前后分别填充 n 个边界值
         return np.pad(y, (n, n), mode='edge')
 
 
     def diff_backward(y):
-        """
-        计算数组的向后差分
-        :param y: 输入的一维数组（列表或 np.ndarray）
-        :return: 向后差分结果
-        """
+       
         # 输入校验
         if not isinstance(y, (list, np.ndarray)):
             raise ValueError("输入 y 必须是列表或 np.ndarray 类型")
@@ -202,24 +191,24 @@ for g in range(0, 500, 1):
     WEIGHTS = [1, 1, 3, 4, 5, 4, 3, 1]
 
     # 处理 AAM 质量项和运动项
-    aam_mass = process_term("F:\\张璐璐\\日常变化\\EAM数据\\AAM_85-24.txt", 8, start_date, end_date, STEP,
+    aam_mass = process_term("F:\\zll\\LOD\\AAM_85-24.txt", 8, start_date, end_date, STEP,
                             WEIGHTS)
-    aam_motion = process_term("F:\\张璐璐\\日常变化\\EAM数据\\AAM_85-24.txt", 11, start_date, end_date, STEP,
+    aam_motion = process_term("F:\\zll\\LOD\\AAM_85-24.txt", 11, start_date, end_date, STEP,
                               WEIGHTS)
 
     # 处理 OAM 质量项和运动项
-    oam_mass = process_term("F:\\张璐璐\\日常变化\\EAM数据\\OAM_85-24.txt", 8, start_date, end_date, STEP,
+    oam_mass = process_term("F:\\zll\\LOD\\OAM_85-24.txt", 8, start_date, end_date, STEP,
                             WEIGHTS)
-    oam_motion = process_term("F:\\张璐璐\\日常变化\\EAM数据\\OAM_85-24.txt", 11, start_date, end_date, STEP,
+    oam_motion = process_term("F:\\zll\\LOD\\OAM_85-24.txt", 11, start_date, end_date, STEP,
                               WEIGHTS)
     # 处理 HAM 质量项和运动项，不进行加权平均
-    ham_mass = read_specific_column_rows("F:\\张璐璐\\日常变化\\EAM数据\\HAM_85-24.txt", 8,
+    ham_mass = read_specific_column_rows("F:\\zll\\LOD\\HAM_85-24.txt", 8,
                                          start_date, end_date)
-    ham_motion = read_specific_column_rows("F:\\张璐璐\\日常变化\\EAM数据\\HAM_85-24.txt", 11,
+    ham_motion = read_specific_column_rows("F:\\zll\\LOD\\HAM_85-24.txt", 11,
                                            start_date, end_date)
 
     # 处理 SLAM 质量项，不进行加权平均
-    slam_mass = read_specific_column_rows("F:\\张璐璐\\日常变化\\EAM数据\\SLAM_85-24.txt", 8,
+    slam_mass = read_specific_column_rows("F:\\zll\\LOD\\SLAM_85-24.txt", 8,
                                           start_date, end_date)
 
     print(slam_mass)
@@ -584,12 +573,7 @@ for g in range(0, 500, 1):
 
 
     def integrate_with_initial(diff_data, initial_value):
-        """
-        对差分结果进行积分，并添加初始值
-        :param diff_data: 差分结果（一维数组）
-        :param initial_value: 初始值
-        :return: 积分结果（包含初始值）
-        """
+      
         return -np.cumsum(diff_data) + initial_value  # 累加差分结果并添加初始值
 
 
@@ -665,6 +649,7 @@ for g in range(0, 500, 1):
             file.write(f"{value}\n")
 
     print(f"第{g}次预测")
+
 
 
 
