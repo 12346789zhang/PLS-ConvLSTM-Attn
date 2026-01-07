@@ -24,14 +24,14 @@ warnings.filterwarnings("ignore")
 matplotlib.rcParams["font.family"] = "SimHei"  # 定义使其正常显示中文字体黑体
 plt.rcParams["axes.unicode_minus"] = False  # 用来正常显示表示负号
 
-output_folder = 'F:\\张璐璐\\日常变化\\大论文\\图片3'
+output_folder = '\\zll\\LOD\\fig'
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 plot_counter = 1
 
 # 确保目标文件夹存在
-log_folder1 = r"F:\\张璐璐\\日常变化\\大论文\\301"
-log_folder2 = r"F:\\张璐璐\\日常变化\\大论文\\302"
+log_folder1 = r"F:\\zll\\LOD"
+log_folder2 = r"F:\\zll\\LOD"
 os.makedirs(log_folder1, exist_ok=True)
 os.makedirs(log_folder2, exist_ok=True)
 
@@ -665,6 +665,7 @@ for g in range(0, 500, 1):
             file.write(f"{value}\n")
 
     print(f"第{g}次预测")
+
 
 
 
