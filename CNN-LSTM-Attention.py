@@ -1,9 +1,4 @@
 
-'''
-欢迎关注《淘个代码》公众号。
-如代码有问题，请公众号后台留言问题！不要问在吗在吗。
-直接截图留言问题！
-'''
 # In[1]:
 
 # 调用相关库
@@ -37,31 +32,15 @@ from prettytable import PrettyTable #可以优美的打印表格结果
 warnings.filterwarnings("ignore") #取消警告
 
 
-dataset=pd.read_csv("电力负荷预测数据1.csv",encoding='gb2312')
-# 使用pandas模块的read_csv函数读取名为"农林牧渔.csv"的文件。
-# 参数'encoding'设置为'gbk'，这通常用于读取中文字符，确保文件中的中文字符能够正确读取。
-# 读取的数据被存储在名为'dataset'的DataFrame变量中。
+dataset=pd.read_csv("data.csv",encoding='gb2312')
 print(dataset)#显示dataset数据
 
-
-# 单输入单步预测，就让values等于某一列数据，n_out = 1，n_in, num_samples, scroll_window 根据自己情况来
-# 单输入多步预测，就让values等于某一列数据，n_out > 1，n_in, num_samples, scroll_window 根据自己情况来
-# 多输入单步预测，就让values等于多列数据，n_out = 1，n_in, num_samples, scroll_window 根据自己情况来
-# 多输入多步预测，就让values等于多列数据，n_out > 1，n_in, num_samples, scroll_window 根据自己情况来
-values = dataset.values[:,1:] #只取第2列数据，要写成1:2；只取第3列数据，要写成2:3，取第2列之后(包含第二列)的所有数据，写成 1：
-# 从dataset DataFrame中提取数据。
-# dataset.values将DataFrame转换为numpy数组。
-# [:,1:]表示选择所有行（:）和从第二列到最后一列（1:）的数据。
-# 这样做通常是为了去除第一列，这在第一列是索引或不需要的数据时很常见。
+values = dataset.values[:,1:] 
 
 
 
 # 确保所有数据是浮动的
 values = values.astype('float32')
-# 将values数组中的数据类型转换为float32。
-# 这通常用于确保数据类型的一致性，特别是在准备输入到神经网络模型中时。
-
-
 
 
 def data_collation(data, n_in, n_out, or_dim, scroll_window, num_samples):
@@ -74,42 +53,11 @@ def data_collation(data, n_in, n_out, or_dim, scroll_window, num_samples):
         h5 = np.hstack((h2,h4))
         res[i,:] = h5
     return res
-# 关于此函数怎么用，下面详细举例介绍：
-# 构造数据，这个函数可以实现单输入单输出，单输入多输出，多输入单输出，和多输入多输出。
-# 举个例子：
-# 假如原始数据为,其中务必使得数据前n-1列都为特征，最后一列为输出
-# [0.74	0.8	0.23 750.75
-# 0.74 0.87 0.15 716.94
-# 0.74 0.87 0.15 712.77
-# 0.74 0.8 0.15 684.86
-# 0.74 0.8 0.15 728.79
-# 0.72 0.87 0.08 742.81
-# 0.71 0.99 0.16 751.3]
 
-#（多输入多输出为例），假如n_in = 2，n_out=2，scroll_window=1
-# 输入前2行数据的特征，预测未来2个时刻的数据，滑动窗口为1。
-# 使用此函数后，数据会变成：
-# 【0.74 0.8 0.23 750.75  0.74	0.87 0.15 716.94 712.77 684.86
-# 0.74 0.87 0.15 716.94 0.74 0.87	0.15 712.77  684.86 728.79
-# 0.74 0.87 0.15 712.77 0.74 0.8 0.15 684.86 728.79 742.81】
-
-# 假如n_in = 2，n_out=1，scroll_window=2
-# 输入前2行数据的特征，预测未来1个时刻的数据，滑动窗口为2。
-# 使用此函数后，数据会变成：
-# 【0.74 0.8 0.23 750.75  0.74	0.87 0.15 716.94 712.77
-# 0.74 0.87	0.15 712.77  0.74 0.8 0.15 684.86 728.79
-# 0.74 0.8 0.15 728.79 0.72	0.87 0.08 742.81 751.3】
-#写到这里相比大家已经完全明白次函数的用法啦！欢迎关注《淘个代码》公众号！获取更多代码！
-#单输入单输出，和单输入多输出也是这么个用法！单输入无非就是数据维度变低了而已。欢迎关注《淘个代码》公众号！获取更多代码！
-
-
-
-# In[7]:
-# 这里来个多特征输入，单步预测的案例
 n_in = 5  # 输入前5行的数据
-n_out = 2  # 预测未来2步的数据
+n_out = 1  # 预测未来2步的数据
 or_dim = values.shape[1]        # 记录特征数据维度
-num_samples = 2000  # 可以设定从数据中取出多少个点用于本次网络的训练与测试。
+num_samples = 2000  
 scroll_window = 1  #如果等于1，下一个数据从第二行开始取。如果等于2，下一个数据从第三行开始取
 res = data_collation(values, n_in, n_out, or_dim, scroll_window, num_samples)
 # 把数据集分为训练集和测试集
@@ -154,14 +102,6 @@ vp_test = vp_test.reshape((vp_test.shape[0], n_in, or_dim))
 
 
 from keras.layers import Dense, Activation, Dropout, LSTM, Bidirectional, LayerNormalization, Input, Conv1D, MaxPooling1D, Reshape
-# 从keras.layers模块导入多种层类型。
-# Dense是用于创建全连接层的类。
-# Activation是用于添加激活函数的层。
-# Dropout是用于减少过拟合的丢弃层。
-# LSTM是长短时记忆网络层，用于处理序列数据。
-# Bidirectional是用于创建双向LSTM层的包装器。
-# LayerNormalization是用于层级归一化的类。
-# Input是用于模型输入层的函数。
 
 from tensorflow.keras.models import Model
 # 从tensorflow.keras.models模块导入Model类。
@@ -362,12 +302,7 @@ for ii in range(n_out):
 
 plt.ioff()  # 关闭交互模式
 plt.show()
-# 显示图形。
 
-'''
-欢迎关注《淘个代码》公众号。
-如代码有问题，请公众号后台留言问题！不要问在吗在吗。
-直接截图留言问题！
-'''
+
 
 
